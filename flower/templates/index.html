@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/fonts.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/jquery-ui.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/jquery-ui.structure.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/jquery-ui.theme.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/lightslider.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/styles.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/main.min.css' %}">
+</head>
+<body>
+
+<header class="header">
+    <div class="header__top">
+        <div class="wrapper">
+            <div class="header__search">
+                <input class="search__field" type="search" placeholder="Що ви шукаєте?">
+                <a class="search__btn" href="#"></a>
+            </div>
+
+            <div class="toggle__menu">
+                <span class="toggle__top"></span>
+                <span class="toggle__mid"></span>
+                <span class="toggle__bot"></span>
+            </div>
+
+            <nav class="main__menu">
+                <ul>
+                    <li><a href="#">Доставка</a></li>
+                    <li><a href="#">Оплата</a></li>
+                    <li><a href="{% url 'shop:waranty' %}">Гарантії</a></li>
+                    <li><a href="{% url 'shop:contacts' %}">Контакти</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'shop:status' %}">Статус заказу</a></li>
+                {% endif %}
+
+                    <li>{% if not user.is_authenticated %}
+                        <a class="text-right" style="left:100px;" href="{% url 'shop:register' %}">Зареєструватись</a>
+
+                        <form method="post" action="{% url 'shop:login' %}">
+                            {% csrf_token %}
+                            <div>
+{#                                <label> Логін</label>#}
+                                <input placeholder="Логін" type="text" name="username">
+
+
+{#                                <label> Пароль</label>#}
+                                <input  type="password" placeholder="Пароль" name="password">
+
+                                <input  class="btn_form order__quantity-button" type="submit" style="margin-left: 10px" value="Ввійти">
+                            </div>
+                        </form>
+
+                    {% else %}
+
+                        <div style="margin-right: 600px"><a class="nav-link" style="left: 500px" href="{% url 'shop:logout' %}">Вийти - {{ user.username}}</a></div>
+                    {% endif %}
+                    </li>
+                </ul>
+{#                <!--						<li><a href="{% url 'shop:login' %}"><b>Вхід</b></a></li>-->#}
+
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="header__mid">
+        <div class="wrapper">
+            <div class="col_pull clearfix">
+                <div class="col_x3">
+                    <div class="header__logo">
+                        <a href="/">
+                            <img src="{% static 'home/img/logo.png' %}" alt="logo">
+                            <span class="logo__text">Інтернет-магазин квітів</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col_x3">
+                    <div class="header__contact">
+                        <div class="header__adress">м. <span class="text_bold">Івано-Франківск,</span> вул. Галицька, 57
+                        </div>
+                        <div class="header__email">e-mail: buket@mail.ru</div>
+                        <div class="header__phone">
+                            <a href="tel:0996626944"><span class="phone_pink">0(99)</span> 66 26 944</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col_x3">
+                    <div class="header__order">
+                        <div class="col_x3">
+                            {% if not order %}
+                                <div class="header__order">
+                                    <a href="{% url 'shop:basket' %}" class="order__btn">Корзина</a>
+                                    <div class="order__text">
+                                        <p class=""><span class=" text_bold">{{ total_quantity }}</span> товаров</p>
+                                        <p class="">На сумму <span class=" text_bold">{{ sum }} грн.</span></p>
+                                    </div>
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="header__bot">
+        <div class="wrapper">
+            <ul class="header__tabs clearfix">
+                <li>
+                    <a href="#">
+                        <div class="tab__img">
+                            <img src="{% static '/home/img/tab_bouquets.png' %}" alt="bouquets">
+                        </div>
+                        <span class="tab__text">Букети</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="tab__img">
+                            {% load static %}
+                            <img src="{% static 'home/img/tab_flowers.png' %}" alt="flowers">
+                        </div>
+                        <span class="tab__text">Квіти</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="tab__img">
+
+                            <img src="{% static 'home/img/tab_roses.png' %}" alt="roses">
+                        </div>
+                        <span class="tab__text">Троянди</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="tab__img">
+                            <img src="{% static 'home/img/tab_compositions.png' %}" alt="compositions">
+                        </div>
+                        <span class="tab__text">Композиції</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="tab__img">
+                            <img src="{% static 'home/img/tab_gifts.png' %}" alt="gifts">
+                        </div>
+                        <span class="tab__text">Подарунки</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <div class="tab__img">
+                            <img src="{% static 'home/img/tab_weddings.png' %}" alt="weddings">
+                        </div>
+                        <span class="tab__text">Весільні букети</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<div class="content">
+    <div class="wrapper clearfix">
+
+        <div class="content__filters">
+            <div class="filter clearfix">
+                <div class="button__container">
+                    <a href="#" class="filter__btn">фільтр</a>
+                </div>
+                <div class="filter_wrap clearfix">
+                    <p class="filter__title">Ціна</p>
+                    <div class="filter__value">
+                        <div class="slider__container">
+                            <div id="slider"></div>
+                        </div>
+                        <div class="clearfix">
+                            <div class="slider__min-value">
+                                <input type="text" value="0" name="" id="amount" disabled>
+                                <label for="amount">грн.</label>
+                            </div>
+                            <div class="slider__max-value">
+                                <input type="text" value="5000" name="" id="amount1" disabled>
+                                <label for="amount1">грн.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter__product">
+                        <p class="filter__title">Букети з</p>
+                        <form action="" method="" class="clearfix">
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="rose" name="check" id="rose">
+                                <label for="rose">Трояндами</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="lily" name="check" id="lily">
+                                <label for="lily">Ліліями</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="gerbera" name="check" id="gerbera">
+                                <label for="gerbera">Герберами</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="peony" name="check" id="peony">
+                                <label for="peony">Піонами</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="callas" name="check" id="callas">
+                                <label for="callas">Каллами</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="iris" name="check" id="iris">
+                                <label for="iris">Ірисами</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="orchids" name="check" id="orchids">
+                                <label for="orchids">Орхідеями</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="carnations" name="check" id="carnations">
+                                <label for="carnations">Гвоздиками</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="tulips" name="check" id="tulips">
+                                <label for="tulips">Тюльпанами</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="daisies" name="check" id="daisies">
+                                <label for="daisies">Ромашкою</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="chrysanthemum" name="check" id="chrysanthemum">
+                                <label for="chrysanthemum">Хризантемами</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="alstroemeria" name="check" id="alstroemeria">
+                                <label for="alstroemeria">Альстромеріями</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="lisianthus" name="check" id="lisianthus">
+                                <label for="lisianthus">Лізіантусами</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="exotic" name="check" id="exotic">
+                                <label for="exotic">Екзотичними квітами</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="filter__whom">
+                        <p class="filter__title">Кому</p>
+                        <form action="" method="" class="clearfix">
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="male" name="check" id="male">
+                                <label for="male">Мужчина</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="female" name="check" id="female">
+                                <label for="female">Жінка</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="child" name="check" id="child">
+                                <label for="child">Дитина</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="family" name="check" id="family">
+                                <label for="family">Сім'я</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="favorite" name="check" id="favorite">
+                                <label for="favorite">Коханій</label>
+                            </div>
+                            <div class="checkbox__container">
+                                <input type="checkbox" value="partners" name="check" id="partners">
+                                <label for="partners">Діловому партнеру</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="filter__search">
+                        <p class="filter__title">Пошук</p>
+                        <label for="">
+                            <input type="search" placeholder="Что вы ищите?" class="search__field"><a href="#"
+                                                                                                      class="search__btn"></a>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="goods">
+
+            <div class="goods__wrap clearfix">
+
+
+                {% for good in top_goods %}
+                    <li>
+                        <div class="goods__item {{ good.good_item }}">
+                            <a href="{% url 'shop:detail' good.id %}">
+                                <div class="goods__img">
+                                    <img src="{{ good.img1 }}" alt="gift">
+                                </div>
+                            </a>
+                            <a class="goods__name" href="{% url 'shop:detail' good.id %}">{{ good.name }}</a>
+                            <p class="goods__price">{{ good.price }} грн.</p>
+                            <a href="{% url 'shop:add_to_basket' good.id %}?q=1" class="goods__btn">Замовити</a>
+                        </div>
+                    </li>
+
+                {% endfor %}
+            </div>
+            <div class="goods__pages">
+                <div class="large-3 large-offset-5 columns">
+                    <ul class="pagination">
+                        {% if top_goods.has_previous %}
+                            <li class="arrow"><a href="/"><</a></li>
+                            <li class="arrow"><a href="?page={{ top_goods.previous_page_number}}">&laquo;</a></li>
+                        {% else %}
+                            <li class="arrow unavailable"><a>&laquo;</a></li>
+                        {% endif %}
+                        {% for page in  top_goods.paginator.page_range %}
+                            {% if page ==  top_goods.number %}
+                                <li class="current"><a href="?page={{  page }}">{{ page }}</a></li>
+                            {% else %}
+                                <li><a href="?page={{  page }}">{{ page }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if  top_goods.has_next %}
+                            <li class="arrow"><a href="?page={{  top_goods.next_page_number }}">&raquo;</a></li>
+                            <li class="arrow"><a href="?page={{  end_page }}">></a></li>
+                        {% else %}
+                            <li class="arrow unavailable"><a>&raquo;</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--			{% for page in pages %}-->
+            <!--    {# Each "contact" is a Contact model object. #}-->
+            <!--    {{ page.full_name|upper }}<br>-->
+            <!--    ...-->
+            <!--{% endfor %}-->
+        <!--			<div class="pagination">-->
+        <!--    <span class="step-links">-->
+        <!--        {% if pages.has_previous %}-->
+            <!--            <a href="?page=1">&laquo; first</a>-->
+            <!--            <a href="?page={{ pages.previous_page_number }}">previous</a>-->
+            <!--        {% endif %}-->
+
+        <!--        <span class="current">-->
+        <!--            Page {{ pages.number }} of {{ pages.paginator.num_pages }}.-->
+        <!--        </span>-->
+
+        <!--        {% if pages.has_next %}-->
+            <!--            <a href="?page={{ pages.next_page_number }}">next</a>-->
+            <!--            <a href="?page={{ pages.current_page.num_pages }}">last &raquo;</a>-->
+            <!--        {% endif %}-->
+        <!--    </span>-->
+        <!--</div>-->
+
+    </div>
+</div>
+</div>
+<div class="goods__pages">
+    <!--        <div class="large-3 large-offset-5 columns">-->
+    <!--            <ul class="pagination">-->
+    <!--                {% if pages.has_previous %}-->
+        <!--                    <li ><a href="?page={{ pages.previous_page_number }}">&laquo;</a></li>-->
+        <!--					<a href="/">previous</a>-->
+
+        <!--                {% else %}-->
+        <!--                    <li><a href="">&laquo;</a></li>-->
+        <!--                {% endif %}-->
+    <!--                {% for page in pages.paginator.page_range %}-->
+        <!--                    {% if page == pages.number %}-->
+            <!--                        <li class="pages_active"><a href="/page/{{ page.number }}/">{{ page.number }}</a></li>-->
+            <!--                    {% else %}-->
+            <!--                        <li><a href="?page={{ pages.number }}">{{ page.number }}</a></li>-->
+            <!--                    {% endif %}-->
+        <!--                {% endfor %}-->
+    <!--                {% if pages.has_next %}-->
+        <!--                    <li ><a href="?page={{ pages.next_page_number }}">&raquo;</a></li>-->
+        <!--					<a href="?page={{ pages.paginator.num_pages }}">last &raquo;</a>-->
+        <!--                {% else %}-->
+        <!--                    <li ><a href="">&raquo;</a></li>-->
+        <!--                {% endif %}-->
+    <!--            </ul>-->
+    <!--        </div>-->
+{#    {% if is_paginated %}#}
+{#        <div class="goods__pages">#}
+{#            <ul>#}
+{#                {% if pages.has_previous %}#}
+{#                    <li><a href="?page={{ pages.previous_page_number }}"> < </a></li>#}
+{#                {% endif %}#}
+{##}
+{#                <li><a class="pages_active" href="?page={{ pages.number }}">{{ pages.number }}</a>#}
+{#                </li>#}
+{##}
+{##}
+{#                {% if pages.has_next %}#}
+{#                    <li><a href="?page={{ pages.next_page_number }}"> > </a></li>#}
+{#                {% endif %}#}
+{##}
+{#            </ul>#}
+{#        </div>#}
+{#    {% endif %}#}
+</div>
+
+<div class="news">
+    <div class="wrapper">
+        <div class="news__head clearfix">
+            <p class="section__title news__title">Новости</p>
+            <a class="news__list" href="#">Все новости</a>
+        </div>
+        <div class="news__cols clearfix">
+            <div class="col_x3">
+                <div class="news__item">
+                    <div class="news__images">
+                        <img src="{% static 'home/img/img_news-1.jpg' %}" alt="">
+                        <a href="#" class="news__hover"></a>
+                    </div>
+                    <div class="news__content">
+                        <p class="news__date">01.01.16</p>
+                        <a href="#" class="news__text">С Новым годом 2016!</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col_x3">
+                <div class="news__item">
+                    <div class="news__images">
+                        <img src="{% static 'home/img/img_news-2.jpg' %}" alt="">
+                        <a href="#" class="news__hover"></a>
+                    </div>
+                    <div class="news__content">
+                        <p class="news__date">01.01.16</p>
+                        <a href="#" class="news__text">Как украсить дом к Новому году?</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col_x3">
+                <div class="news__item">
+                    <div class="news__images">
+                        <img src="{% static 'home/img/img_news-3.jpg' %}" alt="">
+                        <a href="#" class="news__hover"></a></div>
+                    <div class="news__content">
+                        <p class="news__date">01.01.16</p>
+                        <a href="#" class="news__text">Розыгрыш новогоднего подарка</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="main__footer">
+    <div class="prefooter__background">
+        <div class="prefooter">
+            <div class="wrapper clearfix">
+                <div class="prefooter__cols col">
+                    <a href="#" class="prefooter__item">О магазине</a>
+                    <a href="#" class="prefooter__item">Почему мы?</a>
+                    <a href="#" class="prefooter__item">Отзывы</a>
+                    <a href="#" class="prefooter__item">Скидки</a>
+                </div>
+                <div class="prefooter__cols col">
+                    <a href="#" class="prefooter__item">Гарантии</a>
+                    <a href="#" class="prefooter__item">Возврат денежных средств</a>
+                    <a href="#" class="prefooter__item">Корпоративные букеты и подарки</a>
+                </div>
+                <div class="prefooter__cols col">
+                    <a href="#" class="prefooter__item">Доставка</a>
+                    <a href="#" class="prefooter__item">Доставка в праздничные дни</a>
+                    <a href="#" class="prefooter__item">Спецпредложения к праздникам</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="footer__background">
+        <div class="footer">
+            <div class="wrapper clearfix">
+                <div class="footer__contacts">
+                    <a href="tel:0996626944" class="footer__phone">0(99) <span class="text_bold">66 26 944</span></a><a
+                        href="#" class="footer__mail">e-mail: buket@mail.ru</a>
+                </div>
+                <div class="footer__copyright">
+                    <p>Служба доставки квітів &reg; 2019</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="{% static 'home/js/jquery.min.js' %}"></script>
+<script src="{% static 'home/js/jquery-ui.min.js' %}"></script>
+<script src="{% static 'home/js/lightslider.min.js' %}"></script>
+
+<script src="{% static 'home/js/common.js' %}"></script>
+</body>
+</html>

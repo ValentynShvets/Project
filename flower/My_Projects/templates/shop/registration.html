@@ -1,0 +1,23 @@
+{% extends 'shop/base.html' %}
+	{% load static %}
+{%block content%}
+
+   <center>
+       <form class="form-row" method="post" action="{% url 'shop:register' %} ">
+        {% csrf_token %}
+       {{ form }}
+           <br>
+        <input class="btn_form order__quantity-button" type="submit" value="Реєстрація">
+    </form></center>
+{#           <form class="form-row" method="post" action="{% url 'shop:register' %} ">#}
+{#                    <div class=""></div>#}
+{#                                    <input class="btn_form" type="text" placeholder="Логін" name="login"><br>#}
+{#               </div>#}
+{#               <div><input class="btn_form" type="password" placeholder="Пароль" name="password"><br></div>#}
+{#                                    <input class="btn_form" type="email" placeholder="E-Mail" name="email"><br>#}
+{#                                    <input class="btn_form" type="password" placeholder="Пароль" name="password">#}
+{#                   <input class="btn_form order__quantity-button" type="submit" value="Реєстрація">#}
+{##}
+{#           </form>#}
+
+{%endblock%}

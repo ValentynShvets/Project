@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{%block title%}
+Portfolio
+{%endblock%}
+
+{{get_flashed_messages()}}
+{%block main%}
+<table class="table table-striped">
+    <thead align="left">
+    <tr>
+        <th>Symbol</th>
+        <th>Name</th>
+        <th>Shares</th>
+    <th>Price</th>
+    <th>TOTAL</th>
+    </tr>
+    </thead>
+    <tfoot align="left">
+    <tr>
+        <td colspan="4"></td>
+        <th>{{total2}}</th>
+    </tr>
+    </tfoot>
+
+    <tbody align="left">
+{%for i in range(item)%}
+    <tr>
+
+    <td>{{a[i]}}</td>
+    <td>{{b[i]}}</td>
+    <td>{{c[i]}}</td>
+    <td>${{y[i]}}</td>
+        <td>${{y[i]*c[i]}}</td>
+
+    </tr>
+
+{%endfor%}
+    <tr>
+
+    <td colspan="4">CASH</td>
+        <td>{{total}}</td>
+    </tr>
+    </tbody>
+</table>
+{%endblock%}

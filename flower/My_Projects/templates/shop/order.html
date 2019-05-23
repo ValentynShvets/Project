@@ -1,0 +1,151 @@
+{% extends 'shop/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <h3><p style="color: Blue;"> {{ message }}</p></h3>
+        {% endfor %}
+{% endif %}
+
+
+    <div class="orderpage">
+        <div class="wrapper">
+            <form action="{% url 'shop:order_confirm' %}" method="post">
+                {% csrf_token %}
+                <div class="pr__order-container">
+                    <div class="pr-order">
+                        <p class="unit__title"><span class="unit__num">1</span>
+                            Ваш заказ: {{ total_quantity }} товаров Сумма: <span>{{ sum }} грн.</span></p>
+
+                        <p class="unit__title"><span class="unit__num">2</span>Ваш заказ</p>
+                        <div class="pr-order__box">
+                            <div class="pr-order__table">
+                                <div class="pr-order__head">
+                                    <p class="pr-order__element element__name">Назва товару</p>
+{#                                    <p class="pr-order__element"></p>#}
+
+                                    <p class="pr-order__element element__price">Ціна ₴</p>
+                                    <p class="pr-order__element element__amount">Кількість</p>
+                                    <p class="pr-order__element element__sum">Сумма ₴</p>
+                                </div>
+                                {% for good, quantity, summ in goods %}
+                                    <div class="pr-order__item">
+                                        {#                                    <div class="item_photo"><a href="{% url 'shop:detail' good.id %}"><img#}
+                                        {#                                            alt="" src="{{ good.img_content }}"></a></div>#}
+
+                                        <div class="item__name"><a
+                                                href="{% url 'shop:detail' good.id %}">{{ good.name }}</a></div>
+                                        <div class="item__price">{{ good.price }} грн.</div>
+                                        <div class="item__count">
+                                            <div class=""><a href="{% url 'shop:add_to_basket' good.id %}?q=-1&url=order"
+                                                                                      class="order__quantity-button form-group">-</a>
+                                                <p>{{ quantity }}</p>
+                                                <a href="{% url 'shop:add_to_basket' good.id %}?q=1&url=order"
+                                                                                             class="order__quantity-button form-group">+</a>
+                                            </div>
+                                        </div>
+                                        <div class="item__sum">{{ summ }} грн.</div>
+                                        <div class="item__price">
+                                            <a class="btn_form order__quantity-button"
+                                               href="{% url 'shop:remove' %}?remove=good_{{ good.id }}">Видалити</a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="pr-order__sum">
+                                <p>Сумма:<span>{{ sum }} грн.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="{{ form.user.name }}" value="{{ user_id }}">
+
+                <div class="pr__delivery">
+                    <div class="unit__title"><span class="unit__num">3</span>Доставка</div>
+                    <div class="checkbox-row recipient_wrap send_method">
+                        <div class="checkbox__container del-check">
+                            <input type="radio" name="{{ form.send.name }}" value="sendClient" id="sendClient">
+                            <label for="sendClient">Я получу заказ</label>
+                        </div>
+                        <div class="checkbox__container del-check">
+                            <input type="radio" name="{{ form.send.name }}" value="sendRecipient" id="sendRecipient"
+                                   checked>
+                            <label for="sendRecipient">Отправить заказ адресату</label>
+                        </div>
+                    </div>
+                    <div class="pr__delivery-form send_recipient">
+                        <div class="delivery__form_wrap">
+                            <div class="inputs-row">
+                                <div class="inputs-row__title">Получатель:</div>
+                                <div class="inputs_wrap">
+                                    <input type="text" placeholder="Прізвище*" name="surname">
+                                    <input type="text" placeholder="Ім'я*" name="name">
+                                    <input type="text" placeholder="По-батькові" name="lastname">
+                                    <input type="text" placeholder="Телефон*" name="phone">
+                                </div>
+                            </div>
+                            <div class="inputs-row adress-row">
+                                <div class="inputs-row__title">Адреса доставки:</div>
+                                <div class="adress_cont">
+                                    <div class="input-cont_wrap">
+                                        <input type="text" placeholder="Місто*" name="city"
+                                               class="option_field">
+                                        {#                                        <a href="" class="location_link"></a>#}
+                                    </div>
+                                    <input type="text" placeholder="вул. Советская, д. 62, кв. 3*"
+                                           name="street">
+                                </div>
+                            </div>
+                            <div class="inputs-row">
+                                <div class="checkbox__container card__container">
+                                    <input type="checkbox" name="card" id="card">
+                                    <label for="card">Добавить открытку бесплатно</label>
+                                </div>
+                            </div>
+                            <div class="inputs-row delivery__text">
+                                <textarea name="text" cols="20" rows="10"
+                                          placeholder="Текст"></textarea>
+                            </div>
+                            <div class="inputs-row delivery__time-date">
+                                <div class="inputs-row__title">Дата та час доставки:</div>
+                                <div class="data-time_cont">
+                                    <div class="input-cont_wrap">
+                                        <input type="text" placeholder="08.03.16*" name="date"
+                                               class="option_field">
+                                        {#                                        <a href="#" class="pr__delivery__date"></a>#}
+                                    </div>
+                                    <div class="input-cont_wrap time-input">
+                                        <input type="text" placeholder="00.00*" name="time" class="option_field">
+                                        {#                                        <a href="#" class="pr__delivery__time"></a>#}
+                                    </div>
+                                    <div class="delivery__work-time">
+                                        <span class="text__divide">* обов'язкові поля</span>
+                                        <span class="text__divide">Доставка працює з 9.00 до 24.00</span>
+                                        <span class="text__divide">Ціна доставки - 150 грн.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="delivery__price">
+                                <div class="price__delivery">
+                                    <p class="price__name">Ціна доставки:</p>
+                                    <p class="price__sum">150 грн.</p>
+                                </div>
+                                <div class="pice__sum">
+                                    <p class="price__name price__name_red">Всього:</p>
+                                    <p class="price__sum price__sum_red">{{ total_and_shipping }} грн.</p>
+                                    <input type="hidden" placeholder="sadsd" name="{{ form.sum_total.name }}"
+                                           value="{{ sum_and_send }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input class="order__button" type="submit" value="Заказать">
+            </form>
+
+
+        </div>
+    </div>
+
+{% endblock %}

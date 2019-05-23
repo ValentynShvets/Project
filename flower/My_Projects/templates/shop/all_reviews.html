@@ -1,0 +1,64 @@
+{%extends 'shop/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="">
+                                    <a style="margin-right: 1000px" class="btn_form" href="/{{ good.id }}">Назад до товару</a>
+
+    </div>
+
+    <div class="about">
+        <div class="wrapper clearfix">
+            <div class="col_pull">
+                <div class="col_x2">
+                    <div class="about__gallery">
+
+                        <div class="gallery__img">
+
+                        </div>
+                     <h2>{{ good.name }}</h2>
+                    </div>
+                    <div class="comments_md">
+                        <div class="comments__top clearfix">
+                            <span class="comments__title">Відгуки покупців</span>
+                            <span class="comments__quantity">Всього відгуків - {{ top_reviews.all.count}}</span>
+                        </div>
+                        {% for review in top_reviews %}
+                            <div class="comments__item">
+                                <div class="comment__header clearfix">
+                                    <div class="stars_recall rating_1x rating_2x rating_3x rating_4x rating_5x"></div>
+                                    <p class="comment__date">{{ review.date }}</p>
+                                    <p class="comment__name">{{ review.user.username }}</p>
+                                </div>
+                                <div class="comment__text">{{ review.text }}</div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                <div class="recall recall_md">
+                        {% if user.is_authenticated %}
+                            <div class="recall__header clearfix">
+                                <div class="stars_recall rating_1x rating_2x rating_3x rating_4x rating_5x"></div>
+                                <label for="recall" class="recall__title">Написати відгук</label>
+                            </div>
+                            <form action="{% url 'shop:reviews' %}" method="post">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <p style="color: red;"> {{ message }}</p>
+                                    {% endfor %}
+
+                                {% endif %}
+
+                                {% csrf_token %}
+                                <input name="good" type="hidden" value="{{ good.id }}">
+                                <input name="user" type="hidden" value="{{ user.id }}">
+                                <input name="url" type="hidden" value="{% url 'shop:detail' good.id %}">
+                                <textarea name="text" id="recall" cols="30" rows="4"></textarea>
+                                <button type="submit" class="btn_form">Відправити</button>
+                            </form>
+                        {% endif %}
+                    </div>
+{%endblock%}

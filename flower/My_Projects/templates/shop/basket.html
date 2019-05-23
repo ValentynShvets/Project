@@ -1,0 +1,54 @@
+{%extends 'shop/base.html' %}
+
+{% load staticfiles %}
+{% block content %}
+    <div class="orderpage">
+        <div class="wrapper">
+            <div class="pr__order-container">
+                <div class="pr-order">
+                    <p class="unit__title"><span class="unit__num">1</span>Ваш заказ</p>
+                    <div class="pr-order__box">
+                        <div class="pr-order__table">
+                            <div class="pr-order__head">
+                                <p class="pr-order__element element__name">Назва товару</p>
+{#                                <p class="pr-order__element"></p>#}
+                                <p class="pr-order__element element__price">Ціна ₴</p>
+                                <p class="pr-order__element element__amount">Кількість</p>
+                                <p class="pr-order__element element__sum">Сумма ₴</p>
+                            </div>
+                            {% for good, quantity, summ in goods %}
+                                <div class="pr-order__item">
+                                    <div class="item_photo"><a href="{% url 'shop:detail' good.id %}"><img
+                                            alt="" src="{{ good.img_content.url }}"></a></div>
+
+                                    <div class="item__name"><a
+                                            href="{% url 'shop:detail' good.id %}">{{ good.name }}</a></div>
+                                    <div class="item__price">{{ good.price }} грн.</div>
+                                    <div class="item__count">
+
+                                            <a href="{% url 'shop:add_to_basket' good.id %}?q=-1&url=basket"
+                                               class="order__quantity-button">-</a>
+
+                                        <p>{{ quantity }}</p>
+
+                                        <a href="{% url 'shop:add_to_basket' good.id %}?q=1&url=basket"
+                                                                                         class="order__quantity-button">+</a>
+
+                                    </div>
+                                    <div class="item__sum">{{ summ }} грн.</div>
+                                    <div class="item__price">
+                                        <a class="btn_form order__quantity-button" href="{% url 'shop:remove' %}?remove=good_{{ good.id }}">Видалити</a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="pr-order__sum">
+                            <p>Сумма:<span>{{ total }} грн.</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="order__button" style="display: inline-block" href="{% url 'shop:order' %}">Замовити</a>
+        </div>
+    </div>
+{% endblock %}

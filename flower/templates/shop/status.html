@@ -1,0 +1,29 @@
+{% extends 'shop/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    {% if statuses %}
+
+<center>
+    {% for status in statuses %}
+        {% if status.paied %}
+            <p class="item__count order__button" style="background: #ed969e";> ✓Ваше замовлення на сумму
+                {{ status.sum_total }} грн, дата доставки {{ status.shipping_date }} отримано</p>
+            {% elif  status.sended%}
+            <p class="item__count order__button" style="background: #6DDCBD" >Ваше замовлення на сумму
+                {{ status.sum_total }} грн, дата доставки {{ status.shipping_date }} відправлено</p>
+            {% elif status.send %}
+            <p class="item__count order__button" style="background: #2B81AF">Ваше замовлення на сумму
+                {{ status.sum_total }} грн, дата доставки {{ status.shipping_date }} очікує відправлення</p>
+            {% else %}
+            <p class="item__count order__button" style="color: black;background: #ffeeba ">Ваше замовлення на сумму
+                {{ status.sum_total }} грн, дата доставки {{ status.shipping_date }} в обробці</p>
+        {% endif %}
+
+    {% endfor %}
+        {% else %}
+        <p class=" order__button" >Ви ще не робили замовлень</p>
+</center>
+    {% endif %}
+
+{% endblock %}

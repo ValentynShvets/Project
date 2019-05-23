@@ -1,0 +1,25 @@
+{% extends 'shop/base.html'%}
+{%block content%}
+
+ <center><form method="post" action="{% url 'shop:login' %}">
+       {% csrf_token %}
+     		{%if login_error%}
+            <label style="color:red;" class="error">{{login_error}}</label>
+            {%endif%}
+        <div >
+
+            <label > Логін</label>
+            <input type="text" name="username">
+
+        </div>
+        <div >
+            <label > Пароль</label>
+            <input type="password" name="password">
+        </div>
+<div>
+<input class="button" type="submit" style="margin-left: 10px" value="Ввійти">
+        </div>
+                   <div class="button"><a href="{% url 'shop:register'%}">Реєстрація</a></div>
+
+
+{%endblock%}

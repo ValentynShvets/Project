@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	{% load static %}
+	<title>Document</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'home/css/fonts.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'home/css/jquery-ui.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'home/css/jquery-ui.structure.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'home/css/jquery-ui.theme.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'home/css/lightslider.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'home/css/styles.css' %}">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'home/css/main.min.css' %}">
+
+	  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <style>
+   aside {
+    background: #f0f0f0;
+    padding: 10px;
+    width: 200px;
+    float: right;
+   }
+   article {
+    margin-right: 200px;
+    display: block;
+   }
+
+  </style>
+
+</head>
+<body>
+<header class="header">
+		<div class="header__top">
+			<div class="wrapper">
+				<div class="header__search">
+					<input class="search__field" type="search" placeholder="Що ви шукаєте?">
+					<a class="search__btn" href="#"></a>
+				</div>
+
+				<div class="toggle__menu">
+					<span class="toggle__top"></span>
+					<span class="toggle__mid"></span>
+					<span class="toggle__bot"></span>
+				</div>
+
+				<nav class="main__menu">
+					<ul>
+						<li><a href="#">Доставка</a></li>
+						<li><a href="#">Оплата</a></li>
+						<li><a href="{%url 'shop:waranty' %}">Гарантії</a></li>
+						<li><a href="{%url 'shop:contacts' %}">Контакти</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'shop:status' %}">Статус заказу</a></li>
+                    {% endif %}
+
+
+                    <li>{% if not user.is_authenticated %}
+						<a class="text-right" style="left:100px;" href="{% url 'shop:register' %}">Зареєструватись</a>
+
+                       <form  method="post" action="{% url 'shop:login' %}">
+                            {% csrf_token %}
+                            <div >
+{#                                <label > Логін</label>#}
+                                <input placeholder="Логін" type="text" name="username">
+
+
+{#                                <label > Пароль</label>#}
+                                <input placeholder="Пароль" type="password" name="password">
+
+                                <input  class="btn_form order__quantity-button" type="submit" style="margin-left: 10px" value="Ввійти">
+						</div>
+                        </form>
+                    {% else %}
+
+						<div style="margin-right: 600px"> <a class="nav-link" style="left: 500px" href="{% url 'shop:logout' %}">Вийти - {{ user.username }}</a></div>
+                    {% endif %}</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+
+		<div class="header__mid">
+			<div class="wrapper">
+			<div class="col_pull clearfix">
+				<div class="col_x3">
+					<div class="header__logo">
+						<a href="/">
+							<img src="{%static 'home/img/logo.png' %}" alt="logo">
+							<span class="logo__text">Інтернет-магазин квітів</span>
+						</a>
+					</div>
+				</div>
+				<div class="col_x3">
+					<div class="header__contact">
+						<div class="header__adress">м. <span class="text_bold">Івано-Франківск,</span> вул. Галицька, 57</div>
+						<div class="header__email">e-mail: buket@mail.ru</div>
+						<div class="header__phone">
+							<a href="tel:0996626944"><span class="phone_pink">0(99)</span> 66 26 944</a>
+						</div>
+					</div>
+				</div>
+				<div class="col_x3">
+					<div class="header__order">
+						 <div class="col_x3">
+                    {% if not order %}
+                        <div class="header__order">
+                            <a href="{% url 'shop:basket' %}" class="order__btn">Корзина</a>
+                            <div class="order__text">
+                                <p class=""><span class=" text_bold">{{ total_quantity }}</span> товаров</p>
+                                <p class="">На сумму <span class=" text_bold">{{ sum }} грн.</span></p>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                </div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="header__bot">
+			<div class="wrapper">
+				<ul class="header__tabs clearfix">
+					<li>
+						<a href="#">
+							<div class="tab__img">
+								<img src="{% static 'home/img/tab_bouquets.png' %}" alt="bouquets">
+							</div>
+							<span class="tab__text">Букети</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<div class="tab__img">
+								{% load static %}
+								<img src="{% static 'home/img/tab_flowers.png' %}" alt="flowers">
+							</div>
+							<span class="tab__text">Квіти</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<div class="tab__img">
+
+								<img src="{%static 'home/img/tab_roses.png' %}" alt="roses">
+							</div>
+							<span class="tab__text">Троянди</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<div class="tab__img">
+								<img src="{%static 'home/img/tab_compositions.png' %}" alt="compositions">
+							</div>
+							<span class="tab__text">Композиції</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<div class="tab__img">
+								<img src="{%static 'home/img/tab_gifts.png' %}" alt="gifts">
+							</div>
+							<span class="tab__text">Подарунки</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<div class="tab__img">
+								<img src="{%static 'home/img/tab_weddings.png' %}" alt="weddings">
+							</div>
+							<span class="tab__text">Весільні букети</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</header>
+
+	 <main class="container p-5">
+{% block content %}
+
+
+
+{% endblock %}
+	 </main>
+
+	<footer class="main__footer">
+		<div class="prefooter__background">
+			<div class="prefooter">
+				<div class="wrapper clearfix">
+					<div class="prefooter__cols col">
+						<a href="#" class="prefooter__item">О магазине</a>
+						<a href="#" class="prefooter__item">Почему мы?</a>
+						<a href="#" class="prefooter__item">Отзывы</a>
+						<a href="#" class="prefooter__item">Скидки</a>
+					</div>
+					<div class="prefooter__cols col">
+						<a href="#" class="prefooter__item">Гарантии</a>
+						<a href="#" class="prefooter__item">Возврат денежных средств</a>
+						<a href="#" class="prefooter__item">Корпоративные букеты и подарки</a>
+					</div>
+					<div class="prefooter__cols col">
+						<a href="#" class="prefooter__item">Доставка</a>
+						<a href="#" class="prefooter__item">Доставка в праздничные дни</a>
+						<a href="#" class="prefooter__item">Спецпредложения к праздникам</a>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="footer__background">
+			<div class="footer">
+				<div class="wrapper clearfix">
+					<div class="footer__contacts">
+						<a href="tel:0996626944" class="footer__phone">0(99) <span class="text_bold">66 26 944</span></a><a href="#" class="footer__mail">e-mail: buket@mail.ru</a>
+					</div>
+					<div class="footer__copyright">
+						<p>Служба доставки цветов &reg; 2019</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<script src="{% static 'home/js/jquery.min.js' %}"></script>
+	<script src="{% static 'home/js/jquery-ui.min.js' %}"></script>
+	<script src="{% static 'home/js/lightslider.min.js' %}"></script>
+
+	<script src="{% static 'home/js/common.js' %}"></script>
+</body>
+</html>
+</body>
+</html>

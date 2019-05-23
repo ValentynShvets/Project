@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{%block title%}
+Portfolio
+{%endblock%}
+
+{%block main%}
+<table class="table table-striped">
+    <thead align="left">
+    <tr>
+        <th>Symbol</th>
+        <th>Name</th>
+        <th>Shares</th>
+    <th>Price</th>
+    <th>Transacted</th>
+    </tr>
+    </thead>
+
+
+    <tbody align="left">
+{%for i in range(item)%}
+    <tr>
+
+    <td>{{a[i]}}</td>
+    <td>{{b[i]}}</td>
+    <td>{{c[i]}}</td>
+    <td>${{e[i]}}</td>
+        <td>{{d[i]}}</td>
+
+    </tr>
+
+{%endfor%}
+
+</table>
+{%endblock%}

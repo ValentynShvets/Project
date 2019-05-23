@@ -1,0 +1,187 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="about">
+        <div class="wrapper clearfix">
+            <div class="col_pull">
+                <div class="col_x2">
+                    <div class="about__gallery">
+                        <div class="gallery__img">
+                        </div>
+                        <div class="img__sm_wrap">
+                            <div class="gallery__img_sm">
+                                <a href="{{good.img1}}" data-marker="1" data-alt="">
+                                    <img src="{{good.img1}}" alt="bouquets details">
+                                </a>
+                            </div>
+
+                            <div class="gallery__img_sm">
+                                <a href="{{good.img2}}" data-marker="2" data-alt="">
+                                    <img src="{{good.img2}}"  alt="bouquets details">
+                               </a>
+                            </div>
+                            {% if good.img3 %}
+                                <div class="gallery__img_sm">
+                                    <a href="{{ good.img3.url }}" data-marker="3" data-alt="">
+                                        <img src="{{ good.img3.url }}" alt="bouquets details">
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                    <div class="comments_md">
+                        <div class="comments__top clearfix">
+                            <span class="comments__title">Отзывы покупателей</span>
+                            <span class="comments__quantity">{{ good.reviews_set.all.count }} отзыва</span>
+                        </div>
+                        {% for review in top_reviews %}
+                            <div class="comments__item">
+                                <div class="comment__header clearfix">
+                                    <div class="stars_recall rating_1x rating_2x rating_3x rating_4x rating_5x"></div>
+                                    <p class="comment__date">{{ review.date }}</p>
+                                    <p class="comment__name">{{ review.user.username }}</p>
+                                </div>
+                                <div class="comment__text">{{ review.text }}</div>
+                            </div>
+                        {% endfor %}
+                        <div class="comments__footer">
+                            {% if good.reviews_set.all.count  > 5 %}
+                                <a href="{%url 'shop:allreviews' good.id%}" class="comments__show-more" target="_blank">Показать еще</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="recall recall_md">
+                        {% if user.is_authenticated %}
+                            <div class="recall__header clearfix">
+                                <div class="stars_recall rating_1x rating_2x rating_3x rating_4x rating_5x"></div>
+                                <label for="recall" class="recall__title">Написать отзыв</label>
+                            </div>
+                            <form action="{% url 'shop:reviews' %}" method="post">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <p> {{ message }}</p>
+                                    {% endfor %}
+
+                                {% endif %}
+
+                                {% csrf_token %}
+                                <input name="good" type="hidden" value="{{ good.id }}">
+                                <input name="user" type="hidden" value="{{ user.id }}">
+                                <input name="url" type="hidden" value="{% url 'shop:detail' good.id %}">
+                                <textarea name="text" id="recall" cols="30" rows="4"></textarea>
+                                <button type="submit" class="btn_form">Отправить</button>
+                            </form>
+                        {% endif %}
+                    </div>
+
+
+                </div>
+                <div class="col_x2">
+                    <div class="order">
+                        <p class="order__title">{{ good.name }}</p>
+                        <div class="order__container">
+                            <div class="order__main clearfix">
+                                <form method="get" action="{% url 'shop:detail' good.id %}">
+                                    {% csrf_token %}
+                                    <div class="order__price-container">
+                                        <p class="order__price">{{ good.price }} руб.</p>
+                                        <div class="order__quantity">
+                                            <p class="order__quantity-text">Количество</p>
+                                            <div class="order__quantity-container"><a href="#"
+                                                                                      class="order__quantity-button order__minus">-</a>
+                                                <input type="text" value="{{ quantity }}" name="q" maxlength="4"
+                                                       class="order__count"><a href="#"
+                                                                               class="order__quantity-button order__plus">+</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order__button-container">
+                                        <input class="order__button" type="submit" value=" ЗАКАЗАТЬ" >
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="order__footer">При заказе букета вы получите 3% бонусов или 90 рублей. Вы их
+                                можете использовать при следующем заказе.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="delivery">
+                        <p class="delivery__title">Доставка</p>
+                        <p class="delivery__item delivery__standart">С 9.00 до 24.00 - <span>500 руб.</span></p>
+                        <p class="delivery__item delivery__nighttime">Доставка в ночное время - <span>700 руб.</span>
+                        </p>
+                    </div>
+                    <div class="description">
+                        <p class="description__title">Описание буклета</p>
+                        <p class="description__text">{{ good.descriprion }}</p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="partners__carousel">
+                <div class="section__title carousel__title">Наши клиенты</div>
+                <ul class="clearfix" id="partners">
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'img/partners_logo1.png' %}" alt="">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'img/partners_logo2.png' %}" alt="">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'img/partners_logo3.png' %}" alt="">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'img/partners_logo4.png' %}" alt="">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'img/partners_logo5.png' %}" alt="">
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <img src="{% static 'img/partners_logo6.jpg' %}" alt="">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="product__carousel">
+                <div class="section__title carousel__title">Вас может заинтересовать</div>
+                <ul class="clearfix" id="gallery">
+                    {% for good in top_goods %}
+                        <li>
+                            <div class="goods__item {{ good.good_item }}">
+                                <a href="{% url 'shop:detail' good.id %}">
+                                    <div class="goods__img">
+                                        <img src="{{ good.img_content.url }}" alt="gift">
+                                    </div>
+                                </a>
+                                <a class="goods__name" href="{% url 'shop:detail' good.id %}">{{ good.name }}</a>
+                                <p class="goods__price">{{ good.price }} грн.</p>
+                                <a href="#" class="goods__btn">Заказать</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}
