@@ -17,7 +17,7 @@ cssselect==1.0.3
 decorator==4.4.0
 defusedxml==0.6.0
 dj-static==0.0.6
-Django==2.2
+Django==2.2.21
 django-allauth==0.39.1
 Flask==1.0.2
 Flask-RESTful==0.3.7
